@@ -1,0 +1,32 @@
+services:
+  frontend:
+    build: ./frontend
+    container_name: laboratorio-frontend
+    ports:
+      - "8080:80"
+    networks:
+      - laboratorio_net
+
+  backend:
+    build: ./backend
+    container_name: laboratorio-backend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    networks:
+      - laboratorio_net
+
+  db:
+    image: mariadb:latest
+    environment:
+      - MARIADB_ROOT_PASSWORD=1234
+    volumes:
+      - ./db/data:/var/lib/mysql
+    networks:
+      - laboratorio_net
+    restart: unless-stopped
+
+networks:
+  laboratorio_net:
+    driver: bridge
