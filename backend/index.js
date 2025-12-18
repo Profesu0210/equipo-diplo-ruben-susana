@@ -19,7 +19,6 @@ app.use((req, res, next) => {
   next();
 });
 
-
 app.get("/api/status", (req, res) => {
   res.json({ status: "OK" });
 });

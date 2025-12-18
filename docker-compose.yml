@@ -2,18 +2,31 @@ services:
   frontend:
     build: ./frontend
     container_name: laboratorio-frontend
-    ports:
-      - "8080:80"
+    expose:
+      - "80"
     networks:
       - laboratorio_net
 
   backend:
     build: ./backend
     container_name: laboratorio-backend
-    ports:
-      - "3000:3000"
+    expose:
+      - "3000"
     depends_on:
       - db
+    networks:
+      - laboratorio_net
+
+  nginx:
+    image: nginx:latest
+    container_name: laboratorio-nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - frontend
+      - backend
     networks:
       - laboratorio_net
 
