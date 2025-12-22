@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Asistencia</title>
+    <style>
+        :root { --primario: #4a90e2; --secundario: #2ecc71; --fondo: #f0f2f5; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--fondo); margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 450px; }
+        h1 { color: #333; font-size: 24px; margin-bottom: 20px; }
+        input { width: 100%; padding: 15px; margin-bottom: 15px; border: 2px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 16px; }
+        .btn-registrar { width: 100%; padding: 15px; background: var(--secundario); color: white; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-registrar:hover { background: #27ae60; transform: translateY(-2px); }
+        
+        table { width: 100%; margin-top: 25px; border-spacing: 0; }
+        th { text-align: left; color: #888; font-size: 12px; text-transform: uppercase; padding-bottom: 10px; }
+        td { padding: 12px 0; border-top: 1px solid #eee; color: #444; }
+        .hora { color: var(--primario); font-weight: bold; font-size: 14px; }
+    </style>
+</head>
+<body>
+  <div style= "max-width: 600px; margin: 20px auto; padding: 25px; background: #ffffff; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);border: 1px solid #e1e8ed;">
+    
+    <label style="display:block; margin-bottom:8px; font-weight:bold; color: #444;">📚 Materia:</label> 
+    <select id="materia" style="width:100%; padding:12px; margin-bottom:18px; border-radius:8px; border: 1px solid #ccc; font-size: 16px;">
+        <option value="PRACTICA PROFESIONALIZANTE">Practica profesionalizante</option>
+        <option value="SISTEMAS OPERATIVOS">Sistemas Operativos</option>
+        <option value="SEGURIDAD INFORMATICA ">Seguridad Informatica </option>
+        <option value="SISTEMAS ADMINISTRATIVOS"> Sistemas Administrativos </option>
+    </select>
+
+    <label style="display:block; margin-bottom:8px; font-weight:bold; color: #444;">📅 Fecha:</label>
+    <input type="date" id="fechaRegistro" style="width:100%; padding:12px; margin-bottom:18px; border-radius:8px; border: 1px solid #ccc; font-size: 16px;">
+
+    <label style="display:block; margin-bottom:8px; font-weight:bold; color: #444;">👤 Nombre del Alumno:</label>
+    <input type="text" id="nombreUsuario" placeholder="Ej: Juan Pérez" style="width:100%; padding:12px; margin-bottom:20px; border-radius:8px; border: 1px solid #ccc; font-size: 16px;">
+
+    <button onclick="registrar()" style="width:100%; background-color: #27ae60; color: white; padding: 15px; border: none; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer;">
+        REGISTRAR ASISTENCIA
+    </button>
+</div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ALUMNO</th>
+                <th style="text-align: right;">Hora de Ingreso</th>
+            </tr>
+        </thead>
+        <tbody id="tablaCuerpo"></tbody>
+    </table>
+</div>
+
+   <script>
+    // 1. Esta función se ejecuta apenas abre la página
+    window.onload = function() {
+        // Pone la fecha de hoy automáticamente en el calendario
+        if(document.getElementById('fechaRegistro')) {
+            document.getElementById('fechaRegistro').valueAsDate = new Date();
+        }
+        mostrarRegistros();
+    };
+
+    // 2. Función para registrar un alumno
+    function registrar() {
+        const inputNombre = document.getElementById('nombreUsuario');
+        const selectMateria = document.getElementById('materia');
+        const inputFecha = document.getElementById('fechaRegistro');
+
+        const nombre = inputNombre.value.trim();
+        const materia = selectMateria.value;
+        const fecha = inputFecha.value;
+        
+        const ahora = new Date();
+        const hora = ahora.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        if (!nombre || !fecha) {
+            alert("¡Falta el nombre o la fecha!");
+            return;
+        }
+
+        // Si tienes la función del sonido, se activa aquí
+        if(typeof tocarBeep === "function") tocarBeep();
+
+        let lista = JSON.parse(localStorage.getItem('asistencias')) || [];
+        
+        // Guardamos el objeto completo
+        lista.unshift({ 
+            nombre: nombre, 
+            materia: materia, 
+            fecha: fecha, 
+            hora: hora 
+        });
+        
+        localStorage.setItem('asistencias', JSON.stringify(lista));
+
+        inputNombre.value = ""; // Limpia el cuadro de texto
+        inputNombre.focus();    // Deja el cursor listo para el siguiente alumno
+        mostrarRegistros();     // Actualiza la tabla
+    }
+
+    // 3. Función para dibujar la tabla en pantalla
+    function mostrarRegistros() {
+        const tabla = document.getElementById('tablaCuerpo');
+        const contador = document.getElementById('contador');
+        const lista = JSON.parse(localStorage.getItem('asistencias')) || [];
+        
+        if (!tabla) return;
+
+        // Dibujamos las filas con el nuevo diseño (Materia debajo del nombre)
+        tabla.innerHTML = lista.map(reg => `
+            <tr>
+                <td>
+                    <strong>${reg.nombre}</strong><br>
+                    <small style="color: #7f8c8d;">📖 ${reg.materia}</small>
+                </td>
+                <td style="text-align: right;">
+                    <small style="color: #7f8c8d;">${reg.fecha}</small><br>
+                    <strong>${reg.hora}</strong>
+                </td>
+            </tr>
+        `).join('');
+
+        // Actualizamos el número del contador
+        if (contador) contador.innerText = lista.length;
+    }
+
+    // Función del sonido (opcional, por si la usas)
+    function tocarBeep() {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioCtx.createOscillator();
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
+        oscillator.connect(audioCtx.destination);
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.1);
+    }
+</script>
