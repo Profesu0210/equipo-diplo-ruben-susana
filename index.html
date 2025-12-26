@@ -23,6 +23,33 @@
         th { text-align: left; color: #888; font-size: 12px; text-transform: uppercase; padding-bottom: 10px; }
         td { padding: 12px 0; border-top: 1px solid #eee; color: #444; }
         .hora { color: var(--primario); font-weight: bold; font-size: 14px; }
+        /*---Inicio de ajustes responsive--*/
+
+        /* evita que la pagina se mueva en el celular*/
+        html.body{ overflow-x: hidden;
+                  width:100%; margin: o; padding: 0; }
+
+        /* ajustes para pantallas celular */
+        @media sreen and (max-width: 600px) { 
+            /* ajusta titulo para que no se corte*/ 
+            h1 { font-size: 1.6rem!important; text-align: center;
+                word-wrap: break-word;
+               }
+
+            /* ajusta el logo */
+            img,.logo{ max-width:90% !important; height: auto !important; display: block; margin: 0 auto 10px auto;
+                     }
+            /* en tabla deslizar */
+            table { display: block;
+                   overflow-x: auto; 
+                   white-space: nowrap;
+                  }
+            /* ajusta contenedores principales sin margenes fijos*/
+            .container, .main,section {
+                width: 100% !important; padding: 10px !important; margin: 0 !important;
+            }
+        }
+        
     </style>
 </head>
 <body>
