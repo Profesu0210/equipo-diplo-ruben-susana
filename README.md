@@ -1,7 +1,7 @@
 # CONTROL DE ASISTENCIA-Equipo Diplo
 Este proyecto fue realizado por ** Ruben** y ** Susana ** cursantes de la Diplomatura de infraestructura tecnologica con software libre 
 ! [arquitectura del Sistema]
-(arquitectura.png)
+(arquitectura.png.drawio.png)
 
 ### notas
 logo diseñado en CANVA
