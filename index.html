@@ -35,23 +35,29 @@
         
 
         /* ajustes para pantallas celular */
-        @media sreen and (max-width: 600px) { 
-            /* ajusta titulo para que no se corte*/ 
-            h1 { font-size: 1.6rem!important; text-align: center;
-                word-wrap: break-word;
-               }
-        @media sreen and ( max-width: 600px) {
-            .titulo { font-size: 1.4rem;}
-            .subtitulo { font-size: 1rem;}
-            button,imput {
-                width: 90% !important;
-                margin: 10% auto! important;
+        @media screen and (max-width: 600px) { 
+            html,body {
+                overflow-x: hidden; 
+                width: 100%;
+            }
+            .titulo principal {
+                font.size: 1.4rem !important;
+                margin: 10px 0;
+            }
+            .contenedor-principal, .form-container {
+                display: flex;
+                flex-direction: column;
+                padding: 10px;
+            }
+            table{
                 display: block;
-        
+                overflow-x: auto;
+                width: 100%;
             }
         }
-        
-    </style>
+        </style>
+    
+                
 </head>
 <body>
   <div style= "max-width: 600px; margin: 20px auto; padding: 25px; background: #ffffff; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);border: 1px solid #e1e8ed;">
